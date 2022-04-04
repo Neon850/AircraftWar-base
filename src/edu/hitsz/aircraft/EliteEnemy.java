@@ -60,8 +60,8 @@ public class EliteEnemy extends AbstractAircraft {
 
 
     public void generateProp(List<AbstractProp>props){
-        int X = this.getLocationX();
-        int Y = this.getLocationY();
+        int x = this.getLocationX();
+        int y = this.getLocationY();
 
         AbstractProp prop;
         PropFactory propFactory;
@@ -72,17 +72,17 @@ public class EliteEnemy extends AbstractAircraft {
 
         if(i == 0){
             propFactory = new BloodPropFactory();
-            prop = propFactory.generateProp(X, Y, 0, 1) ;
+            prop = propFactory.generateProp(x, y, 0, 1) ;
             props.add(prop);
         }
         else if(i == 1){
             propFactory = new BombPropFactory();
-            prop = propFactory.generateProp(X, Y, 0, 1) ;
+            prop = propFactory.generateProp(x, y, 0, 1) ;
             props.add(prop);
         }
         else if(i == 2){
             propFactory = new BulletPropFactory();
-            prop = propFactory.generateProp(X, Y, 0, 1) ;
+            prop = propFactory.generateProp(x, y, 0, 1) ;
             props.add(prop);
         }
         else{

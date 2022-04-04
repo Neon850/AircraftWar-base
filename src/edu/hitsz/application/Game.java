@@ -72,7 +72,15 @@ public class Game extends JPanel {
         props = new LinkedList<>();
 
         //Scheduled 线程池，用于定时任务调度
-        executorService = new ScheduledThreadPoolExecutor(1);
+        ThreadFactory gameThread = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setName("game thread");
+                return t;
+            }
+        };
+        executorService = new ScheduledThreadPoolExecutor(1,gameThread);
 
         //启动英雄机鼠标监听
         new HeroController(this, heroAircraft);
