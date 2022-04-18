@@ -11,25 +11,19 @@ class HeroAircraftTest {
     private volatile static HeroAircraft heroAircraft2;
 
     @BeforeEach
-    void setUp() {
-
+    void setUp(){
+        heroAircraft2 = HeroAircraft.getInstance();
     }
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void getInstance() {
-        heroAircraft = HeroAircraft.getInstance(
-                10,10,5,4,1000);
+        heroAircraft = HeroAircraft.getInstance();
         assertNotNull(heroAircraft);
     }
 
     @Test
     void getLocationX() {
-        heroAircraft2 = HeroAircraft.getInstance(
-                9,10,5,4,1000);
-        assertEquals(9,heroAircraft2.getLocationX());
+
+        assertEquals(256,heroAircraft2.getLocationX());
     }
 
 }

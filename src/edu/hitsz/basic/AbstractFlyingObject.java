@@ -69,6 +69,8 @@ public abstract class AbstractFlyingObject {
         this.speedY = speedY;
     }
 
+
+
     /**
      * 可飞行对象根据速度移动
      * 若飞行对象触碰到横向边界，横向速度反向

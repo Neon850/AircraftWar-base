@@ -1,10 +1,11 @@
 package edu.hitsz.prop;
 
+import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.basic.AbstractFlyingObject;
 
 
-public abstract class AbstractProp extends AbstractFlyingObject {
+public abstract class AbstractProp extends AbstractFlyingObject{
     private int power = 10;
 
     public AbstractProp(int locationX, int locationY, int speedX, int speedY) {
@@ -30,4 +31,7 @@ public abstract class AbstractProp extends AbstractFlyingObject {
             vanish();
         }
     }
+
+    public abstract void influence(AbstractAircraft abstractAircraft);
+
 }

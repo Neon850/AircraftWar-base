@@ -12,8 +12,7 @@ class EliteEnemyTest {
 
     @BeforeEach
     void setUp() {
-        heroAircraft = HeroAircraft.getInstance(
-                10,10,5,4,1000);
+        heroAircraft = HeroAircraft.getInstance();
 
     }
 

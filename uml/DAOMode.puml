@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface UserDao
+class User
+class UserDaoImpl
+class Game
+
+UserDaoImpl..|>UserDao
+UserDaoImpl-->User
+Game..>UserDao
+
+class User{
+- userName:String
+- rank:int
+- score:int
+- time :int[]
++User(int[] time,int score,String userName)
++getUserRank():int
++setUserRank():void
++getUserName():String
++setUserName():void
++getUserScore():int
++serUserScore():void
++gerUserTime():String
+}
+
+interface UserDao{
++gerAllUsers():List<User>
++doAdd(User user):void
++doDelete(String userName):void
++findByName(String userName):void
+}
+class UserDaoImpl{
+- users:List<User>
++ UserDaoImpl()
++ gerAllUsers():List<User>
++ doAdd(User user):void
++doDelete(String userName):void
++findByName(String userName):void
+}
+class Game{
+- userRank():void
+}
+
+
+@enduml

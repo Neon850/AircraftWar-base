@@ -3,20 +3,32 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
+import edu.hitsz.bullet.HeroBullet;
+import edu.hitsz.prop.AbstractProp;
+import edu.hitsz.prop_factory.BloodPropFactory;
+import edu.hitsz.prop_factory.BombPropFactory;
+import edu.hitsz.prop_factory.BulletPropFactory;
+import edu.hitsz.prop_factory.PropFactory;
+import edu.hitsz.strategy.ScatterBullet;
+import edu.hitsz.strategy.Strategy;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class BossEnemy extends AbstractAircraft{
     public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
+        Strategy scatterBullet = new ScatterBullet();
+        this.setStrategy(scatterBullet);
     }
 
     /** 攻击方式 */
 
-    private int shootNum = 1;     //子弹一次发射数量
+    private int shootNum = 3;     //子弹一次发射数量
     private int power = 30;       //子弹伤害
     private int direction = 1;  //子弹射击方向 (向上发射：1，向下发射：-1)
+
 
     @Override
     public void forward() {
@@ -28,23 +40,60 @@ public class BossEnemy extends AbstractAircraft{
     }
 
     @Override
+    public int getDirection() {
+        return direction;
+    }
+
+    @Override
+    public int getShootNum() {
+        return shootNum;
+    }
+
+    @Override
+    public int getPower() {
+        return power;
+    }
+
+    @Override
     /**
      * 通过射击产生子弹
      * @return 射击出的子弹List
      */
     public List<BaseBullet> shoot() {
-        List<BaseBullet> res = new LinkedList<>();
+        return executeStrategy(this);
+    }
+
+    public void generateProp(List<AbstractProp>props){
         int x = this.getLocationX();
-        int y = this.getLocationY() + direction*2;
-        int speedX = 0;
-        int speedY = this.getSpeedY() + direction*5;
-        BaseBullet baseBullet;
-        for(int i=0; i<shootNum; i++){
-            // 子弹发射位置相对飞机位置向前偏移
-            // 多个子弹横向分散
-            baseBullet = new EnemyBullet(x + (i*2 - shootNum + 1)*10, y, speedX, speedY, power);
-            res.add(baseBullet);
+        int y = this.getLocationY();
+
+        int propsNum = 3;
+        AbstractProp prop;
+        PropFactory propFactory;
+
+        for(int i = 0; i<propsNum;i++)
+        {
+            Random random = new Random();
+            int pro = random.nextInt(10);
+
+            if(pro>=0 && pro<=2){
+                propFactory = new BloodPropFactory();
+                prop = propFactory.generateProp(x, y, 0, 1) ;
+                props.add(prop);
+            }
+            else if(pro>=3 && pro<=5){
+                propFactory = new BombPropFactory();
+                prop = propFactory.generateProp(x, y, 0, 1) ;
+                props.add(prop);
+            }
+            else if(pro>=6 && pro<=8){
+                propFactory = new BulletPropFactory();
+                prop = propFactory.generateProp(x, y, 0, 1) ;
+                props.add(prop);
+            }
+            else{
+                prop = null;
+            }
         }
-        return res;
     }
 }

@@ -3,12 +3,15 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
+import edu.hitsz.bullet.HeroBullet;
 import edu.hitsz.enemy_factory.EnemyFactory;
 import edu.hitsz.prop.*;
 import edu.hitsz.prop_factory.BloodPropFactory;
 import edu.hitsz.prop_factory.BombPropFactory;
 import edu.hitsz.prop_factory.BulletPropFactory;
 import edu.hitsz.prop_factory.PropFactory;
+import edu.hitsz.strategy.DirectBullet;
+import edu.hitsz.strategy.Strategy;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +21,8 @@ import java.util.Random;
 public class EliteEnemy extends AbstractAircraft {
     public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
+        Strategy directBullet = new DirectBullet();
+        this.setStrategy(directBullet);
     }
 
     /** 攻击方式 */
@@ -38,24 +43,27 @@ public class EliteEnemy extends AbstractAircraft {
     }
 
     @Override
+    public int getDirection() {
+        return direction;
+    }
+
+    @Override
+    public int getShootNum() {
+        return shootNum;
+    }
+
+    @Override
+    public int getPower() {
+        return power;
+    }
+    @Override
     /**
      * 通过射击产生子弹
      * @return 射击出的子弹List
      */
     public List<BaseBullet> shoot() {
-        List<BaseBullet> res = new LinkedList<>();
-        int x = this.getLocationX();
-        int y = this.getLocationY() + direction*2;
-        int speedX = 0;
-        int speedY = this.getSpeedY() + direction*4;
-        BaseBullet baseBullet;
-        for(int i=0; i<shootNum; i++){
-            // 子弹发射位置相对飞机位置向前偏移
-            // 多个子弹横向分散
-            baseBullet = new EnemyBullet(x + (i*2 - shootNum + 1)*10, y, speedX, speedY, power);
-            res.add(baseBullet);
-        }
-        return res;
+
+        return executeStrategy(this);
     }
 
 
@@ -67,20 +75,19 @@ public class EliteEnemy extends AbstractAircraft {
         PropFactory propFactory;
 
         Random random = new Random();
-        double pro = random.nextInt(5);
-        int i = (int)Math.floor(pro);
+        int pro = random.nextInt(10);
 
-        if(i == 0){
+        if(pro>=0 && pro<=2){
             propFactory = new BloodPropFactory();
             prop = propFactory.generateProp(x, y, 0, 1) ;
             props.add(prop);
         }
-        else if(i == 1){
+        else if(pro>=3 && pro<=5){
             propFactory = new BombPropFactory();
             prop = propFactory.generateProp(x, y, 0, 1) ;
             props.add(prop);
         }
-        else if(i == 2){
+        else if(pro>=6 && pro<=8){
             propFactory = new BulletPropFactory();
             prop = propFactory.generateProp(x, y, 0, 1) ;
             props.add(prop);
