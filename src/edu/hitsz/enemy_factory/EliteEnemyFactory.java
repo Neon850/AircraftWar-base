@@ -11,8 +11,8 @@ import java.util.Random;
 public class EliteEnemyFactory implements EnemyFactory{
     private int locationX = (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1;
     private int locationY = (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1;
-    private int speedX = 2;
-    private int speedY = 5;
+    private int speedX = 1;
+    private int speedY = 3;
     private int hp = 30;
 
     @Override

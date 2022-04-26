@@ -1,6 +1,8 @@
 package edu.hitsz.aircraft;
 
+import edu.hitsz.application.Game;
 import edu.hitsz.application.Main;
+import edu.hitsz.application.MusicThread;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
 import edu.hitsz.bullet.HeroBullet;
@@ -16,11 +18,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import static edu.hitsz.application.Game.musicFlag;
+
 public class BossEnemy extends AbstractAircraft{
     public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
         Strategy scatterBullet = new ScatterBullet();
         this.setStrategy(scatterBullet);
+        if(musicFlag){
+            musicThread = new MusicThread("src/videos/bgm_boss.wav");
+            musicThread.start();
+        }
     }
 
     /** 攻击方式 */
@@ -28,6 +36,7 @@ public class BossEnemy extends AbstractAircraft{
     private int shootNum = 3;     //子弹一次发射数量
     private int power = 30;       //子弹伤害
     private int direction = 1;  //子弹射击方向 (向上发射：1，向下发射：-1)
+    private MusicThread musicThread;
 
 
     @Override
@@ -55,6 +64,17 @@ public class BossEnemy extends AbstractAircraft{
     }
 
     @Override
+    public void vanish() {
+        isValid = false;
+        musicThread.stopMusic();
+    }
+
+    @Override
+    public void bomb(){
+
+    }
+
+    @Override
     /**
      * 通过射击产生子弹
      * @return 射击出的子弹List
@@ -78,17 +98,17 @@ public class BossEnemy extends AbstractAircraft{
 
             if(pro>=0 && pro<=2){
                 propFactory = new BloodPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 1) ;
+                prop = propFactory.generateProp(x, y, 0, 2) ;
                 props.add(prop);
             }
             else if(pro>=3 && pro<=5){
                 propFactory = new BombPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 1) ;
+                prop = propFactory.generateProp(x, y, 0, 2) ;
                 props.add(prop);
             }
             else if(pro>=6 && pro<=8){
                 propFactory = new BulletPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 1) ;
+                prop = propFactory.generateProp(x, y, 0, 2) ;
                 props.add(prop);
             }
             else{

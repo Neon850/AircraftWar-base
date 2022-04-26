@@ -1,5 +1,6 @@
 package edu.hitsz.aircraft;
 
+import edu.hitsz.application.Game;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class EliteEnemy extends AbstractAircraft {
+public class EliteEnemy extends AbstractAircraft implements Subscribe{
     public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
         Strategy directBullet = new DirectBullet();
@@ -65,6 +66,10 @@ public class EliteEnemy extends AbstractAircraft {
 
         return executeStrategy(this);
     }
+    @Override
+    public void bomb(){
+        Game.score = Game.score + 40;
+    }
 
 
     public void generateProp(List<AbstractProp>props){
@@ -76,20 +81,19 @@ public class EliteEnemy extends AbstractAircraft {
 
         Random random = new Random();
         int pro = random.nextInt(10);
-
         if(pro>=0 && pro<=2){
             propFactory = new BloodPropFactory();
-            prop = propFactory.generateProp(x, y, 0, 1) ;
+            prop = propFactory.generateProp(x, y, 0, 2) ;
             props.add(prop);
         }
         else if(pro>=3 && pro<=5){
             propFactory = new BombPropFactory();
-            prop = propFactory.generateProp(x, y, 0, 1) ;
+            prop = propFactory.generateProp(x, y, 0, 2) ;
             props.add(prop);
         }
         else if(pro>=6 && pro<=8){
             propFactory = new BulletPropFactory();
-            prop = propFactory.generateProp(x, y, 0, 1) ;
+            prop = propFactory.generateProp(x, y, 0, 2) ;
             props.add(prop);
         }
         else{

@@ -1,6 +1,7 @@
 package edu.hitsz.user_dao;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class User implements Serializable{
     private String userName;
@@ -8,10 +9,10 @@ public class User implements Serializable{
     private int score;
     private int[] time;
 
-    public User(int[] time,int score, String userName){
-        this.time = time;
+    public User(int score, String userName){
         this.score = score;
         this.userName = userName;
+        getCurrentTime();
     }
 
     public int getUserRank(){
@@ -39,10 +40,21 @@ public class User implements Serializable{
     }
 
     public String getUserTime(){
+
+
         StringBuffer sb = new StringBuffer();
         sb.append(time[0]).append('-').append(time[1]).append(" ").
                 append(time[2]).append(':').append(time[3]);
         return sb.toString();
+    }
+
+    public void getCurrentTime(){
+        Calendar cal=Calendar.getInstance();
+        int month =cal.get(Calendar.MONTH)+1;//月(0~11)
+        int date =cal.get(Calendar.DATE);//日
+        int hour =cal.get(Calendar.HOUR_OF_DAY);//时
+        int minute=cal.get(Calendar.MINUTE);//分
+        time = new int[]{month,date,hour,minute};
     }
 
 }

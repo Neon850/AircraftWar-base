@@ -1,7 +1,10 @@
 package edu.hitsz.bullet;
 
 import edu.hitsz.application.Main;
+import edu.hitsz.application.MusicThread;
 import edu.hitsz.basic.AbstractFlyingObject;
+
+import static edu.hitsz.application.Game.musicFlag;
 
 /**
  * 子弹类。
@@ -39,5 +42,9 @@ public abstract class BaseBullet extends AbstractFlyingObject {
 
     public int getPower() {
         return power;
+    }
+
+    public void musicEffect(){
+
     }
 }

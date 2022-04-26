@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author hitsz
  */
-public abstract class AbstractAircraft extends AbstractFlyingObject{
+public abstract class AbstractAircraft extends AbstractFlyingObject implements Subscribe{
     /**
      * 生命值
      */
@@ -59,6 +59,14 @@ public abstract class AbstractAircraft extends AbstractFlyingObject{
             hp = maxHp;
         }
     }
+
+    public void increaseShootNum(){
+        this.shootNum += 1;
+    }
+
+    public void resetShootNum(int num){
+        this.shootNum = num;
+    }
     /**
      * 飞机射击方法，可射击对象必须实现
      * @return
@@ -67,13 +75,17 @@ public abstract class AbstractAircraft extends AbstractFlyingObject{
      */
     public abstract List<BaseBullet> shoot();
 
-    private Strategy strategy;
+    protected Strategy strategy;
 
     public void setStrategy(Strategy strategy){
         this.strategy = strategy;
     }
 
-    public List<BaseBullet> executeStrategy(AbstractAircraft abstractAircraft){
+    public Strategy getStrategy(){
+        return this.strategy;
+    }
+
+    public List<BaseBullet> executeStrategy(AbstractAircraft abstractAircraft)  {
         return strategy.doOperation(abstractAircraft);
     }
 

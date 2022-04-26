@@ -12,13 +12,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ScatterBullet implements Strategy{
+
     @Override
-    public List<BaseBullet> doOperation(AbstractAircraft abstractAircraft){
+    public List<BaseBullet> doOperation(AbstractAircraft abstractAircraft) {
         List<BaseBullet> res = new LinkedList<>();
-        //int shootNum = abstractAircraft.getShootNum();
-        int shootNum = 3;
+
+        int shootNum = abstractAircraft.getShootNum();
         int power = abstractAircraft.getPower();
         BaseBullet baseBullet;
+
 
         if(abstractAircraft instanceof HeroAircraft){
             int direction = abstractAircraft.getDirection();
@@ -34,6 +36,7 @@ public class ScatterBullet implements Strategy{
                 res.add(baseBullet);
             }
         }
+
         if(abstractAircraft instanceof BossEnemy) {
             int direction = abstractAircraft.getDirection();
             int x = abstractAircraft.getLocationX();
@@ -48,7 +51,6 @@ public class ScatterBullet implements Strategy{
                 res.add(baseBullet);
             }
         }
-
 
         return res;
     }

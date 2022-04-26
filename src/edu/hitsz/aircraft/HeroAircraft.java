@@ -6,9 +6,11 @@ import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.HeroBullet;
 import edu.hitsz.strategy.DirectBullet;
+import edu.hitsz.strategy.ScatterBullet;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * 英雄飞机，游戏玩家操控
@@ -29,9 +31,6 @@ public class HeroAircraft extends AbstractAircraft {
      * @param speedY 英雄机射出的子弹的基准速度（英雄机无特定速度）
      * @param hp    初始生命值
      */
-//    public HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
-//        super(locationX, locationY, speedX, speedY, hp);
-//    }
 
 
     private volatile static HeroAircraft heroAircraft;
@@ -75,8 +74,13 @@ public class HeroAircraft extends AbstractAircraft {
         return power;
     }
 
-    public void increaseShootNumber(){
+    @Override
+    public void increaseShootNum(){
         this.shootNum += 1;
+    }
+    @Override
+    public void resetShootNum(int num){
+        this.shootNum = num;
     }
 
     @Override
@@ -87,4 +91,10 @@ public class HeroAircraft extends AbstractAircraft {
     public List<BaseBullet> shoot() {
         return executeStrategy(this);
     }
+
+    @Override
+    public void bomb(){
+
+    }
+
 }

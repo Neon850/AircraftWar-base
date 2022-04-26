@@ -1,5 +1,6 @@
 package edu.hitsz.aircraft;
 
+import edu.hitsz.application.Game;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author hitsz
  */
-public class MobEnemy extends AbstractAircraft {
+public class MobEnemy extends AbstractAircraft implements Subscribe{
 
     public MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
@@ -31,5 +32,11 @@ public class MobEnemy extends AbstractAircraft {
     public List<BaseBullet> shoot() {
         return new LinkedList<>();
     }
+
+    @Override
+    public void bomb(){
+        Game.score = Game.score + 30;
+    }
+
 
 }

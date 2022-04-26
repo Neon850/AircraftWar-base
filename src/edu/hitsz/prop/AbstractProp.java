@@ -32,6 +32,8 @@ public abstract class AbstractProp extends AbstractFlyingObject{
         }
     }
 
-    public abstract void influence(AbstractAircraft abstractAircraft);
+    public abstract void influence(AbstractAircraft abstractAircraft) throws InterruptedException;
+
+
 
 }

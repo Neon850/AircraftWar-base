@@ -1,7 +1,14 @@
 package edu.hitsz.application;
 
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+
+import edu.hitsz.BoardPanel;
+import edu.hitsz.Menu;
+
+
 
 /**
  * 程序入口
@@ -11,13 +18,11 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 512;
     public static final int WINDOW_HEIGHT = 768;
+    public static Object panelLock;
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws InterruptedException, IOException {
+        panelLock = new Object();
         System.out.println("Hello Aircraft War");
-
-
-
         // 获得屏幕的分辨率，初始化 Frame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         JFrame frame = new JFrame("Aircraft War");
@@ -28,9 +33,34 @@ public class Main {
                 WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Game game = new Game();
-        frame.add(game);
-        frame.setVisible(true);
-        game.action();
+        synchronized (panelLock){
+            Menu menu = new Menu();
+            frame.setContentPane(menu.MenuPanel);
+            frame.setVisible(true);
+            panelLock.wait();
+            frame.remove(menu.MenuPanel);
+
+            Game game = new Game();
+//            Game.musicFlag = true;
+            frame.setContentPane(game);
+            frame.setVisible(true);
+            game.action();
+            panelLock.wait();
+            frame.remove(game);
+
+
+            BoardPanel boardPanel = new BoardPanel();
+            frame.setContentPane(boardPanel.BoardPanel);
+            frame.setVisible(true);
+            String userName = JOptionPane.showInputDialog(null,
+                    "游戏结束，你的得分为："+Game.score+"."+"\n请输入名字记录得分：",
+                    "输入", JOptionPane.PLAIN_MESSAGE);
+            boardPanel.addName(userName);
+            panelLock.wait();
+            frame.setContentPane(boardPanel.BoardPanel);
+            frame.setVisible(true);
+
+        }
+
     }
 }

@@ -16,8 +16,8 @@ public class DirectBullet implements Strategy{
     public List<BaseBullet> doOperation(AbstractAircraft abstractAircraft){
 
         List<BaseBullet> res = new LinkedList<>();
-//        int shootNum = abstractAircraft.getShootNum();
-        int shootNum = 1;
+        abstractAircraft.resetShootNum(1);
+        int shootNum = abstractAircraft.getShootNum();
         int power = abstractAircraft.getPower();
         BaseBullet baseBullet;
 

@@ -16,9 +16,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
@@ -29,7 +26,7 @@ import java.util.concurrent.*;
  * @author hitsz
  */
 public class Game extends JPanel {
-
+    public static boolean musicFlag = false;
     private int backGroundTop = 0;
 
     /**
@@ -40,7 +37,7 @@ public class Game extends JPanel {
     /**
      * 时间间隔(ms)，控制刷新频率
      */
-    private int timeInterval = 40;
+    private final int timeInterval = 20;
 
     private final HeroAircraft heroAircraft;
     private final List<AbstractAircraft> enemyAircrafts;
@@ -48,22 +45,17 @@ public class Game extends JPanel {
     private final List<BaseBullet> enemyBullets;
     private final List<AbstractProp> props;
 
-    private int enemyMaxNumber = 5;
+    private final int enemyMaxNumber = 5;
 
-    private boolean gameOverFlag = false;
-    private int score = 0;
+    public boolean gameOverFlag = false;
+    public static int score = 0;
     private int bossScoreThreshold = 0;
     private boolean bossDied = true;
-    private int time = 0;
-    /**
-     * 周期（ms)
-     * 指示子弹的发射、敌机的产生频率
-     */
-    private int cycleDuration = 600;
     private int cycleTime = 0;
-
+    private MusicThread musicThread;
 
     public Game() {
+
         heroAircraft = HeroAircraft.getInstance();
 
         enemyAircrafts = new LinkedList<>();
@@ -72,13 +64,10 @@ public class Game extends JPanel {
         //添加道具
         props = new LinkedList<>();
         //Scheduled 线程池，用于定时任务调度
-        ThreadFactory gameThread = new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(r);
-                t.setName("game thread");
-                return t;
-            }
+        ThreadFactory gameThread = r -> {
+            Thread t = new Thread(r);
+            t.setName("game thread");
+            return t;
         };
         executorService = new ScheduledThreadPoolExecutor(1,gameThread);
 
@@ -91,32 +80,19 @@ public class Game extends JPanel {
      */
     public void action() {
 
+        if(musicFlag){
+            musicThread = new MusicThread("src/videos/bgm.wav");
+            musicThread.setRepeat();
+            musicThread.start();
+        }
         // 定时任务：绘制、对象产生、碰撞判定、击毁及结束判定
         Runnable task = () -> {
-
-            time += timeInterval;
 
             // 周期性执行（控制频率）
             if (timeCountAndNewCycleJudge()) {
                 //System.out.println(time);
                 // 新敌机产生
-                double pro = Math.random();
-                if (enemyAircrafts.size() < enemyMaxNumber) {
-                    if(pro<0.6d){
-                        EnemyFactory enemyFactory = new MobEnemyFactory();
-                        enemyAircrafts.add(enemyFactory.generateEnemy());
-                    }
-                    else{
-                        EnemyFactory enemyFactory = new EliteEnemyFactory();
-                        enemyAircrafts.add(enemyFactory.generateEnemy());
-                    }
-                }
-
-                //若boss机处于待生成状态，且分数达到，则生成boss机
-                if(createBoss(score,bossScoreThreshold,bossDied)){
-                    EnemyFactory enemyFactory = new BossEnemyFactory();
-                    enemyAircrafts.add(enemyFactory.generateEnemy());
-                }
+                createEnemies();
                 // 飞机射出子弹
                 shootAction();
             }
@@ -131,7 +107,11 @@ public class Game extends JPanel {
             propsMoveAction();
 
             // 撞击检测
-            crashCheckAction();
+            try {
+                crashCheckAction();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             // 后处理
             postProcessAction();
@@ -144,12 +124,15 @@ public class Game extends JPanel {
                 // 游戏结束
                 executorService.shutdown();
                 gameOverFlag = true;
-                try {
-                    userRank();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                if(musicFlag){
+                    new MusicThread("src/videos/game_over.wav").start();
+                    musicThread.stopMusic();
                 }
                 System.out.println("Game Over!");
+                synchronized (Main.panelLock) {
+                    Main.panelLock.notify();
+                }
             }
 
         };
@@ -158,7 +141,7 @@ public class Game extends JPanel {
          * 以固定延迟时间进行执行
          * 本次任务执行完成后，需要延迟设定的延迟时间，才会执行新的任务
          */
-        executorService.scheduleWithFixedDelay(task, timeInterval, timeInterval, TimeUnit.MILLISECONDS);
+        executorService.scheduleWithFixedDelay(task, timeInterval, 7, TimeUnit.MILLISECONDS);
 
     }
 
@@ -170,6 +153,11 @@ public class Game extends JPanel {
 
     private boolean timeCountAndNewCycleJudge() {
         cycleTime += timeInterval;
+        /**
+         * 周期（ms)
+         * 指示子弹的发射、敌机的产生频率
+         */
+        int cycleDuration = 600;
         if (cycleTime >= cycleDuration && cycleTime - timeInterval < cycleTime) {
             // 跨越到新的周期
             cycleTime %= cycleDuration;
@@ -209,6 +197,7 @@ public class Game extends JPanel {
             prop.forward();
         }
     }
+
     private boolean createBoss(int score,int bossScoreThreshold,boolean bossDied){
         //当前得分超出当前阈值一定差值且boss已死亡，避免出现多架boss机
         if(score-bossScoreThreshold >= 400 && bossDied)
@@ -221,36 +210,33 @@ public class Game extends JPanel {
         }
     }
 
-    private void userRank() throws IOException {
+    private void createEnemies(){
 
-        for(int i = 0;i<40;i++){
-            System.out.print("*");
-        }
-        System.out.print("\n"+"得分排行榜"+"\n");
-        for(int i = 0;i<40;i++){
-            System.out.print("*");
-        }
-        System.out.print("\n");
-
-        Calendar cal=Calendar.getInstance();
-        int month =cal.get(Calendar.MONTH)+1;//月(0~11)
-        int date =cal.get(Calendar.DATE);//日
-        int hour =cal.get(Calendar.HOUR_OF_DAY);//时
-        int minute=cal.get(Calendar.MINUTE);//分
-        int[] time = {month,date,hour,minute};
-
-
-        UserDao userDao = new UserDaoImpl();
-        User newUser = new User(time,score,"testUserName");
-        userDao.doAdd(newUser);
-
-        for(User user: userDao.getAllUsers()){
-            System.out.println("第"+user.getUserRank()+"名："+user.getUserName()+"," +
-                    user.getUserScore()+","+user.getUserTime());
+        double pro = Math.random();
+        EnemyFactory enemyFactory;
+        //随机生成精英机和普通机
+        if (enemyAircrafts.size() < enemyMaxNumber) {
+            if(pro<0.6d){
+                enemyFactory = new MobEnemyFactory();
+            }
+            else{
+                enemyFactory = new EliteEnemyFactory();
+            }
+            enemyAircrafts.add(enemyFactory.generateEnemy());
         }
 
+        //若boss机处于待生成状态，且分数达到，则生成boss机
+        if(createBoss(score,bossScoreThreshold,bossDied)){
+            enemyFactory = new BossEnemyFactory();
+            //停止当前游戏bgm
+            if(musicFlag){
+                musicThread.stopMusic();
+            }
 
+            enemyAircrafts.add(enemyFactory.generateEnemy());
+        }
     }
+
 
     /**
      * 碰撞检测：
@@ -258,7 +244,7 @@ public class Game extends JPanel {
      * 2. 英雄攻击/撞击敌机
      * 3. 英雄获得补给
      */
-    private void crashCheckAction() {
+    private void crashCheckAction() throws InterruptedException {
         // TODO 敌机子弹攻击英雄
         for (BaseBullet bullet : enemyBullets) {
             if (bullet.notValid()) {
@@ -285,23 +271,34 @@ public class Game extends JPanel {
                     // 敌机撞击到英雄机子弹
                     // 敌机损失一定生命值
                     enemyAircraft.decreaseHp(bullet.getPower());
+                    bullet.musicEffect();
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
                         //根据击落敌机的类型判断
-                        if(enemyAircraft instanceof MobEnemy)
-                        {score += 30;}
 
+                        if(enemyAircraft instanceof MobEnemy){
+                            //击败普通机 score+30
+                            score = score+30;
+
+                        }
                         if(enemyAircraft instanceof BossEnemy){
+                            //击败boss机 score+30
+                            score = score+50;
                             bossScoreThreshold = score;//重置boss生成阈值
                             bossDied = true;//标记boss已死亡
-                            score += 50;
+                            if(musicFlag){
+                                musicThread = new MusicThread("src/videos/bgm.wav");
+                                musicThread.start();
+                            }
+                            enemyAircraft.vanish();
                             ((BossEnemy) enemyAircraft).generateProp(props);
                         }
 
                         // TODO 获得分数，产生道具补给
                         if(enemyAircraft instanceof EliteEnemy){
                             //击败精英机 score+40;产生道具
-                            score+=40;
+                            score = score+40;
+
                             ((EliteEnemy) enemyAircraft).generateProp(props);
                         }
                     }
