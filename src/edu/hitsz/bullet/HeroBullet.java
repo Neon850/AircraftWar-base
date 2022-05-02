@@ -1,8 +1,8 @@
 package edu.hitsz.bullet;
 
+import edu.hitsz.application.Main;
 import edu.hitsz.application.MusicThread;
 
-import static edu.hitsz.application.Game.musicFlag;
 
 /**
  * @Author hitsz
@@ -17,19 +17,16 @@ public class HeroBullet extends BaseBullet {
     private MusicThread musicThread;
 
     @Override
-    public void vanish() {
-        isValid = false;
-
-    }
-
-
-    @Override
     public void musicEffect(){
-        if(musicFlag){
+        if(Main.musicFlag){
             musicThread = new MusicThread("src/videos/bullet_hit.wav");
             musicThread.start();
         }
     }
 
 
+    @Override
+    public void bomb() {
+
+    }
 }

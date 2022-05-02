@@ -1,6 +1,7 @@
 package edu.hitsz.basic;
 
 import edu.hitsz.aircraft.AbstractAircraft;
+import edu.hitsz.aircraft.Subscribe;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.application.MusicThread;
@@ -12,7 +13,7 @@ import java.awt.image.BufferedImage;
  *
  * @author hitsz
  */
-public abstract class AbstractFlyingObject {
+public abstract class AbstractFlyingObject implements Subscribe {
 
     //locationX、locationY为图片中心位置坐标
     /**
@@ -155,6 +156,7 @@ public abstract class AbstractFlyingObject {
         }
         return height;
     }
+
     public boolean notValid() {
         return !this.isValid;
     }
@@ -167,6 +169,8 @@ public abstract class AbstractFlyingObject {
     public void vanish() {
         isValid = false;
     }
+
+
 
 }
 

@@ -21,6 +21,7 @@ public class BoardPanel extends JPanel{
     private JTable scoreTable;
     private JButton deleteButton;
     private JLabel rank;
+    private JLabel gameMode;
     private String userName = null;
     private String[] columnName;
     private String[][] tableData;
@@ -30,6 +31,7 @@ public class BoardPanel extends JPanel{
     public BoardPanel() throws IOException {
         columnName = new String[]{"名次","玩家名","得分","记录时间"};
         userNum = userDao.getAllUsers().size();
+        gameMode.setText("难度："+Main.gameMode);
         createTable(userNum);
         displayPanel();
     }
@@ -52,7 +54,7 @@ public class BoardPanel extends JPanel{
     }
 
     //将DAO写入表格
-    public void createTable(int userNum){
+    private void createTable(int userNum){
         tableData = new String[userNum][4];
         int k=0;
         for(User user:userDao.getAllUsers()){

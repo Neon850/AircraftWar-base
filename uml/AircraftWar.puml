@@ -100,7 +100,7 @@ class BossEnemyFactory
 
 abstract class AbstractAircraft
 {
-	# maxHp:int
+	# axHp:int
     # hp:int
     + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + decreaseHp(int decrease):void
@@ -112,31 +112,31 @@ abstract class AbstractAircraft
 
 
 class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + shoot():List<BaseBullet>
 }
 class EliteEnemy {
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + shoot():List<BaseBullet>
+    + generateProp(List<AbstractProp>)：void
 }
 class BossEnemy {
-
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + shoot():List<BaseBullet>
 }
 
 
 abstract class AbstractProp
 {
-    - power:int
-    + AbstractProp(int locationX, int locationY, int speedX, int speedY)
-    + forward():void
 }
 class BloodProp {
-    + BloodProp(int locationX, int locationY,
-     int speedX, int speedY)
 }
 class BombProp {
-    + BombProp(int locationX, int locationY,
-     int speedX, int speedY)
 }
 class BulletProp {
-    + BulletProp(int locationX, int locationY,
-     int speedX, int speedY)
 }
 
 @enduml

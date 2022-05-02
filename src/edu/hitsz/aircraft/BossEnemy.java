@@ -18,14 +18,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import static edu.hitsz.application.Game.musicFlag;
 
 public class BossEnemy extends AbstractAircraft{
     public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
         Strategy scatterBullet = new ScatterBullet();
         this.setStrategy(scatterBullet);
-        if(musicFlag){
+        if(Main.musicFlag){
             musicThread = new MusicThread("src/videos/bgm_boss.wav");
             musicThread.start();
         }
@@ -66,7 +65,9 @@ public class BossEnemy extends AbstractAircraft{
     @Override
     public void vanish() {
         isValid = false;
-        musicThread.stopMusic();
+        if(Main.musicFlag){
+            musicThread.stopMusic();
+        }
     }
 
     @Override

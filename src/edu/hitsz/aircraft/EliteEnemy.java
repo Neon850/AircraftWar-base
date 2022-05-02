@@ -69,6 +69,8 @@ public class EliteEnemy extends AbstractAircraft implements Subscribe{
     @Override
     public void bomb(){
         Game.score = Game.score + 40;
+
+        vanish();
     }
 
 
@@ -81,6 +83,7 @@ public class EliteEnemy extends AbstractAircraft implements Subscribe{
 
         Random random = new Random();
         int pro = random.nextInt(10);
+//        int pro = 4;
         if(pro>=0 && pro<=2){
             propFactory = new BloodPropFactory();
             prop = propFactory.generateProp(x, y, 0, 2) ;

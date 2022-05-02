@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class Game
+class EasyGame
+class MediumGame
+class HardGame
+
+Game <|-- EasyGame
+Game <|-- MediumGame
+Game <|-- HardGame
+
+
+abstract class Game {
++ action():void
+# timeCountAndNewCycleJudge():boolean
+# shootAction():void
+# bulletsMoveAction():void
+# aircraftsMoveAction():void
+# propsMoveAction():void
+# crashCheckAction():void
+# bombEmpty(AbstractProp abstractProp):void
+# createBoss():boolean
+# difficultyIncrease():void
+# postProcessAction():void
++ createEnemies():void
++ paint(Graphics g):void
++paintImageWithPositionRevised(Graphics g, List<? extends AbstractFlyingObject> objects):void
++paintScoreAndLife(Graphics g):void
+}
+
+class EasyGame{
++createEnemies():void
+}
+class MediumGame{
++createEnemies():void
+}
+class HardGame{
++createEnemies():void
+}
+
+@enduml

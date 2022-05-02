@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author hitsz
  */
-public abstract class AbstractAircraft extends AbstractFlyingObject implements Subscribe{
+public abstract class AbstractAircraft extends AbstractFlyingObject {
     /**
      * 生命值
      */
@@ -79,10 +79,6 @@ public abstract class AbstractAircraft extends AbstractFlyingObject implements S
 
     public void setStrategy(Strategy strategy){
         this.strategy = strategy;
-    }
-
-    public Strategy getStrategy(){
-        return this.strategy;
     }
 
     public List<BaseBullet> executeStrategy(AbstractAircraft abstractAircraft)  {

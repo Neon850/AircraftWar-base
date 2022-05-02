@@ -1,0 +1,43 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface Subscribe
+class EliteEnemy
+class MobEnemy
+class EnemyBullet
+class BombProp
+abstract class Game
+
+Subscribe<|..EliteEnemy
+Subscribe<|..MobEnemy
+Subscribe<|..EnemyBullet
+
+BombProp o-- Subscribe
+Game-->BombProp
+
+interface Subscribe{
++ bomb():void
+}
+
+class BombProp{
+- subscribeList:List<AbstractFlyingObject>
++ addSubscribe(AbstractFlyingObject abstractFlyingObject):void
++ removeSubscribe(AbstractFlyingObject abstractFlyingObject):void
++ notifyAllSubscribe():void
++ influence(AbstractAircraft abstractAircraft):void
+}
+
+class EliteEnemy{
++ bomb():void
+}
+class MobEnemy{
++ bomb():void
+}
+class EnemyBullet{
++ bomb():void
+}
+abstract class Game{
++bombEmpty(AbstractProp abstractProp):void
+}
+
+@enduml

@@ -36,6 +36,9 @@ public class MobEnemy extends AbstractAircraft implements Subscribe{
     @Override
     public void bomb(){
         Game.score = Game.score + 30;
+
+        vanish();
+
     }
 
 

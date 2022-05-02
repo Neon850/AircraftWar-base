@@ -1,39 +1,50 @@
 package edu.hitsz.prop;
 
 import edu.hitsz.aircraft.AbstractAircraft;
+import edu.hitsz.application.Main;
 import edu.hitsz.application.MusicThread;
+import edu.hitsz.basic.AbstractFlyingObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.hitsz.application.Game.musicFlag;
 
-public class BombProp extends AbstractProp{
+public class BombProp extends AbstractProp {
+    private List<AbstractFlyingObject> subscribeList = new ArrayList<>();
     public BombProp(int locationX, int locationY, int speedX, int speedY){
         super(locationX, locationY, speedX, speedY);
 
     }
-    private List<AbstractAircraft> subscribeList = new ArrayList<>();
 
-    public void addSubscribe(AbstractAircraft abstractAircraft){
-        subscribeList.add(abstractAircraft);
+    @Override
+    public void bomb(){
+
     }
 
-    public void removeSubscirbe(AbstractAircraft abstractAircraft){
-        subscribeList.remove(abstractAircraft);
+    @Override
+    public void addSubscribe(AbstractFlyingObject abstractFlyingObject){
+        subscribeList.add(abstractFlyingObject);
     }
 
-    public void notifyAllSubscibe(){
-        for(AbstractAircraft abstractAircraft:subscribeList){
-            abstractAircraft.bomb();
+    @Override
+    public void removeSubscribe(AbstractFlyingObject abstractFlyingObject){
+        subscribeList.remove(abstractFlyingObject);
+    }
+
+    @Override
+    public void notifyAllSubscribe(){
+        for(AbstractFlyingObject abstractFlyingObject:subscribeList){
+            abstractFlyingObject.bomb();
         }
+
     }
     @Override
     public void influence(AbstractAircraft abstractAircraft){
-        if(musicFlag){
+        if(Main.musicFlag){
             new MusicThread("src/videos/bomb_explosion.wav").start();
         }
-        System.out.println("BombSupply active!");
+//        System.out.println("BombSupply active!");
+        this.notifyAllSubscribe();
     }
 
 }

@@ -8,11 +8,12 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao{
     private List<User> users;
+    public static String fileName;
 
     public UserDaoImpl() {
         users = new ArrayList<>();
         try {
-            File f = new File("UserData.txt");
+            File f = new File(fileName);
             InputStream in = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(in);
             this.users = (List<User>)ois.readObject();
@@ -46,7 +47,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public void doAdd(User user) throws IOException {
         users.add(user);
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("UserData.txt"));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
         oos.writeObject(users);
         oos.close();
     }
@@ -60,7 +61,7 @@ public class UserDaoImpl implements UserDao{
                 users.remove(targetUser);
             }
         }
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("UserData.txt"));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
         oos.writeObject(users);
         oos.close();
     }

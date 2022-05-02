@@ -4,13 +4,15 @@ import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.basic.AbstractFlyingObject;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class AbstractProp extends AbstractFlyingObject{
-    private int power = 10;
+
+public abstract class AbstractProp extends AbstractFlyingObject {
 
     public AbstractProp(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
-        //this.power = power;
+
     }
 
     @Override
@@ -23,10 +25,10 @@ public abstract class AbstractProp extends AbstractFlyingObject{
         }
 
         // 判定 y 轴出界
-        if (speedY > 0 && locationY >= Main.WINDOW_HEIGHT ) {
+        if (speedY > 0 && locationY >= Main.WINDOW_HEIGHT) {
             // 向下飞行出界
             vanish();
-        }else if (locationY <= 0){
+        } else if (locationY <= 0) {
             // 向上飞行出界
             vanish();
         }
@@ -35,5 +37,10 @@ public abstract class AbstractProp extends AbstractFlyingObject{
     public abstract void influence(AbstractAircraft abstractAircraft) throws InterruptedException;
 
 
+    public abstract void addSubscribe(AbstractFlyingObject abstractFlyingObject);
+
+    public abstract void removeSubscribe(AbstractFlyingObject abstractFlyingObject);
+
+    public abstract void notifyAllSubscribe();
 
 }

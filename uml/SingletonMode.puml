@@ -10,9 +10,15 @@ class HeroAircraft {
     - direction:int
     - heroAircraft:HeroAircraft
     - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
-    + getInstance(int locationX, int locationY, int speedX, int speedY, int hp):HeroAircraft
+    + getInstance():HeroAircraft
     + forward():void
     + shoot():List<BaseBullet>
+    + getDirection():int
+    + getShootNum():int
+    + getPower():int
+    + increaseShootNum():void
+    + resetShootNum(int num):void
+
 }
 
 class Game{

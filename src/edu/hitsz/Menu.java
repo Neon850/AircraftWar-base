@@ -1,9 +1,7 @@
 package edu.hitsz;
 
-import edu.hitsz.application.Game;
-import edu.hitsz.application.ImageManager;
-import edu.hitsz.application.Main;
-import edu.hitsz.application.MusicThread;
+import edu.hitsz.application.*;
+import edu.hitsz.user_dao.UserDaoImpl;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -36,6 +34,9 @@ public class Menu {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ImageManager.BACKGROUND_IMAGE = ImageIO.read(new FileInputStream("src/images/bg.jpg"));
+                    Main.game = new EasyGame();
+                    Main.gameMode = "EASY";
+                    UserDaoImpl.fileName = "EasyModeUserData.txt";
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -49,6 +50,10 @@ public class Menu {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ImageManager.BACKGROUND_IMAGE = ImageIO.read(new FileInputStream("src/images/bg3.jpg"));
+                    Main.game = new MediumGame();
+                    Main.gameMode = "MEDIUM";
+                    UserDaoImpl.fileName = "MediumModeUserData.txt";
+
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -62,6 +67,10 @@ public class Menu {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ImageManager.BACKGROUND_IMAGE = ImageIO.read(new FileInputStream("src/images/bg4.jpg"));
+                    Main.game = new HardGame();
+                    Main.gameMode = "HARD";
+                    UserDaoImpl.fileName = "HardModeUserData.txt";
+
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -76,10 +85,16 @@ public class Menu {
         comboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED){
-                    Game.musicFlag = true;
+                int index = comboBox.getSelectedIndex();
+                if(index == 0){
+                    Main.musicFlag = true;
+                }
+                else{
+                    Main.musicFlag = false;
+
                 }
             }
         });
+
     }
 }

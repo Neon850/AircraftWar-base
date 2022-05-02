@@ -19,6 +19,9 @@ public class Main {
     public static final int WINDOW_WIDTH = 512;
     public static final int WINDOW_HEIGHT = 768;
     public static Object panelLock;
+    public static boolean musicFlag = false;
+    public static String gameMode;
+    public static Game game;
 
     public static void main(String[] args) throws InterruptedException, IOException {
         panelLock = new Object();
@@ -40,20 +43,17 @@ public class Main {
             panelLock.wait();
             frame.remove(menu.MenuPanel);
 
-            Game game = new Game();
-//            Game.musicFlag = true;
             frame.setContentPane(game);
             frame.setVisible(true);
             game.action();
             panelLock.wait();
             frame.remove(game);
 
-
             BoardPanel boardPanel = new BoardPanel();
             frame.setContentPane(boardPanel.BoardPanel);
             frame.setVisible(true);
             String userName = JOptionPane.showInputDialog(null,
-                    "游戏结束，你的得分为："+Game.score+"."+"\n请输入名字记录得分：",
+                    "游戏结束，你的得分为："+game.score+"."+"\n请输入名字记录得分：",
                     "输入", JOptionPane.PLAIN_MESSAGE);
             boardPanel.addName(userName);
             panelLock.wait();

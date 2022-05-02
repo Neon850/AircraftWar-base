@@ -4,43 +4,44 @@
 interface UserDao
 class User
 class UserDaoImpl
-class Game
+class BoardPanel
 
 UserDaoImpl..|>UserDao
 UserDaoImpl-->User
-Game..>UserDao
+BoardPanel..>UserDao
+
 
 class User{
 - userName:String
 - rank:int
 - score:int
 - time :int[]
-+User(int[] time,int score,String userName)
++User(int score,String userName)
 +getUserRank():int
 +setUserRank():void
 +getUserName():String
-+setUserName():void
 +getUserScore():int
-+serUserScore():void
 +gerUserTime():String
++getCurrentTime():void
 }
 
 interface UserDao{
 +gerAllUsers():List<User>
 +doAdd(User user):void
-+doDelete(String userName):void
-+findByName(String userName):void
++doDelete(int rank):void
 }
 class UserDaoImpl{
 - users:List<User>
-+ UserDaoImpl()
++f ileName:String
 + gerAllUsers():List<User>
 + doAdd(User user):void
-+doDelete(String userName):void
-+findByName(String userName):void
++ doDelete(int rank):void
 }
-class Game{
-- userRank():void
+class BoardPanel{
+- createTable(int userNum):void
++ BoardPanel()
++ addName(String userName):void
+
 }
 
 

@@ -1,12 +1,13 @@
 package edu.hitsz.prop;
 
 import edu.hitsz.aircraft.AbstractAircraft;
+import edu.hitsz.application.Main;
 import edu.hitsz.application.MusicThread;
+import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.strategy.DirectBullet;
 import edu.hitsz.strategy.Strategy;
 import edu.hitsz.strategy.ScatterBullet;
 
-import static edu.hitsz.application.Game.musicFlag;
 
 public class BulletProp extends AbstractProp{
     public BulletProp(int locationX, int locationY, int speedX, int speedY){
@@ -19,10 +20,10 @@ public class BulletProp extends AbstractProp{
 
     @Override
     public void influence(AbstractAircraft abstractAircraft) throws InterruptedException {
-        if(musicFlag){
+        if(Main.musicFlag){
             new MusicThread("src/videos/bullet.wav").start();
         }
-        System.out.println("FireSupply active!");
+//        System.out.println("FireSupply active!");
 
         //如果在火力道具有效期间，每触碰一次火力道具，子弹数目加1，有上限
         if(abstractAircraft.getShootNum()<maxShootNum){
@@ -63,7 +64,23 @@ public class BulletProp extends AbstractProp{
             t.start();
         }
     }
+    @Override
+    public void addSubscribe(AbstractFlyingObject abstractFlyingObject){
+
+    }
+
+    @Override
+    public void removeSubscribe(AbstractFlyingObject abstractFlyingObject){
+
+    }
+
+    @Override
+    public void notifyAllSubscribe(){
+    }
 
 
+    @Override
+    public void bomb() {
 
+    }
 }

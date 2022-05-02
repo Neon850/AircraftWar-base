@@ -27,17 +27,11 @@ public class User implements Serializable{
         return userName;
     }
 
-    public void setUserName(String userName){
-        this.userName = userName;
-    }
 
     public int getUserScore(){
         return score;
     }
 
-    public void setUserScore(int score){
-        this.score = score;
-    }
 
     public String getUserTime(){
 
