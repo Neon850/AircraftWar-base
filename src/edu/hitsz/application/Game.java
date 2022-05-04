@@ -54,9 +54,10 @@ public abstract class Game extends JPanel {
     protected boolean bossHappened = false;
     protected int cycleTime = 0;
     protected MusicThread musicThread;
-    protected double eliteEnemyCreatePro = 0.3d;
+    protected double eliteEnemyCreatePro = 0.2;
     protected int lastScore;
     protected int cycleDuration = 200;
+    protected int cycleTimeFlag=0;
 
 
     public Game() {
@@ -168,6 +169,7 @@ public abstract class Game extends JPanel {
         if (cycleTime >= cycleDuration && cycleTime - timeInterval < cycleTime) {
             // 跨越到新的周期
 
+
             cycleTime %= cycleDuration;
             return true;
         } else {
@@ -230,7 +232,7 @@ public abstract class Game extends JPanel {
         //以boss机被消灭作为一轮的结束，每轮新开始时，游戏难度上升
         if (bossDied && bossHappened) {
             //敌机产生周期、英雄机射击、敌机射击周期减小
-            cycleDuration -= 20;
+            cycleDuration -= 10;
             //boss产生阈值提高
             bossScoreThreshold = bossScoreThreshold - 50;
             //精英机产生比例提高
@@ -250,6 +252,22 @@ public abstract class Game extends JPanel {
                     ", 普通机血量提高为：" + mobEnemyFactory.getHp() + ", 敌机速度提高");
             System.out.println("敌机数目最大值变为：" + enemyMaxNumber + ",boss机产生阈值变为：" + bossScoreThreshold);
         }
+    }
+
+    protected void difficultyIncreaseEverytime(){
+
+        cycleTimeFlag++;
+        if(cycleTimeFlag == 10){
+            cycleTimeFlag = 0;
+            //精英机产生比例提高
+            eliteEnemyCreatePro += 0.01;
+            //敌机产生周期、英雄机射击、敌机射击周期减小
+            cycleDuration -= 1;
+            System.out.println("提高难度！精英机产生概率：" + eliteEnemyCreatePro +
+                    ", 敌机周期：" + cycleDuration);
+        }
+
+
     }
 
     protected void bombEmpty(AbstractProp abstractProp){

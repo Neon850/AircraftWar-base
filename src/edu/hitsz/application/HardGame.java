@@ -12,6 +12,23 @@ public class HardGame extends Game {
     public HardGame() {
 
     }
+    @Override
+    protected boolean timeCountAndNewCycleJudge() {
+        cycleTime += timeInterval;
+        /**
+         * 周期（ms)
+         * 指示子弹的发射、敌机的产生频率
+         */
+        if (cycleTime >= cycleDuration && cycleTime - timeInterval < cycleTime) {
+            difficultyIncreaseEverytime();
+            // 跨越到新的周期
+
+            cycleTime %= cycleDuration;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public void createEnemies(){

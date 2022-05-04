@@ -22,6 +22,7 @@ abstract class Game {
 # bombEmpty(AbstractProp abstractProp):void
 # createBoss():boolean
 # difficultyIncrease():void
+# difficultyIncreaseEverytime():void
 # postProcessAction():void
 + createEnemies():void
 + paint(Graphics g):void
@@ -33,9 +34,11 @@ class EasyGame{
 +createEnemies():void
 }
 class MediumGame{
+#timeCountAndNewCycleJudge():boolean
 +createEnemies():void
 }
 class HardGame{
+#timeCountAndNewCycleJudge():boolean
 +createEnemies():void
 }
 
