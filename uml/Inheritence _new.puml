@@ -1,10 +1,6 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-interface Subscribe{
-+ bomb():void
-}
-Subscribe<|..AbstractFlyingObject
 abstract class AbstractFlyingObject
 {
     # locationX:int
@@ -78,7 +74,7 @@ AbstractFlyingObject <|-- AbstractProp
 AbstractAircraft <|-- HeroAircraft
 AbstractAircraft <|-- MobEnemy
 AbstractAircraft <|-- EliteEnemy
-AbstractAircraft <|-- BossEnemy
+    AbstractAircraft <|-- BossEnemy
 
 BaseBullet <|-- HeroBullet
 BaseBullet <|-- EnemyBullet

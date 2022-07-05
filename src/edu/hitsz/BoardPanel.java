@@ -45,7 +45,12 @@ public class BoardPanel extends JPanel{
         else{
             //新增一个用户对象
             User newUser = new User(Game.score,userName);
-            userDao.doAdd(newUser);
+            try{
+                userDao.doAdd(newUser);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
             userNum = userDao.getAllUsers().size();
             createTable(userNum);
             displayPanel();
